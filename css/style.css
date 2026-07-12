@@ -1,0 +1,364 @@
+:root {
+  --navy-950: #0a1626;
+  --navy-900: #0f2140;
+  --navy-800: #16325c;
+  --navy-700: #1b3a6b;
+  --navy-600: #24487f;
+  --silver: #dfe7f2;
+  --cream: #f4f6fa;
+  --ink: #0a1626;
+  --muted: #7d8ba3;
+  --sports: #3b82f6;
+  --pokemon: #f97316;
+  --tcg: #a855f7;
+  --multi: #14b8a6;
+  --accent: #f97316;
+  --accent-2: #3b82f6;
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+  --max-w: 1120px;
+  --shadow: 0 20px 50px -20px rgba(10, 22, 38, 0.5);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--navy-950);
+  color: var(--silver);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Header ---------- */
+
+header.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(10, 22, 38, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(223, 231, 242, 0.08);
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  color: #fff;
+}
+
+.brand img { width: 34px; height: 34px; border-radius: 9px; }
+
+nav.site-nav { display: flex; align-items: center; gap: 28px; }
+nav.site-nav a {
+  text-decoration: none;
+  color: var(--silver);
+  font-size: 0.92rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+nav.site-nav a:hover { opacity: 1; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #fb923c);
+  color: #1a1206;
+  box-shadow: 0 10px 24px -10px rgba(249, 115, 22, 0.6);
+}
+.btn-ghost {
+  background: rgba(223, 231, 242, 0.08);
+  color: var(--silver);
+  border: 1px solid rgba(223, 231, 242, 0.18);
+}
+.btn-sm { padding: 9px 16px; font-size: 0.85rem; }
+.btn-block { width: 100%; }
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 72px 0 40px;
+  background:
+    radial-gradient(700px 400px at 85% 10%, rgba(59, 130, 246, 0.25), transparent 60%),
+    radial-gradient(500px 300px at 10% 90%, rgba(249, 115, 22, 0.12), transparent 60%);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+  color: #fff;
+}
+h1 .hl { color: var(--accent); }
+
+.hero p.lead {
+  font-size: 1.15rem;
+  color: var(--silver);
+  opacity: 0.85;
+  max-width: 46ch;
+  margin: 0 0 28px;
+}
+
+.hero-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+.fineprint { font-size: 0.85rem; color: var(--muted); }
+
+.hero-phone {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.phone-frame {
+  width: 280px;
+  border-radius: 40px;
+  border: 8px solid #1a2b45;
+  background: #1a2b45;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+}
+.phone-frame::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 120px; height: 22px;
+  background: #1a2b45;
+  border-radius: 0 0 14px 14px;
+  z-index: 2;
+}
+.phone-frame img { width: 100%; display: block; }
+
+/* ---------- Section shared ---------- */
+
+section { padding: 88px 0; }
+.section-head { max-width: 640px; margin: 0 0 48px; }
+.kicker {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin: 0 0 10px;
+}
+h2 {
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  color: #fff;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+}
+.section-head p { color: var(--muted); font-size: 1.05rem; margin: 0; }
+
+/* ---------- Feature grid ---------- */
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.card {
+  background: rgba(223, 231, 242, 0.04);
+  border: 1px solid rgba(223, 231, 242, 0.1);
+  border-radius: var(--radius-md);
+  padding: 26px;
+}
+.card .icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+.card h3 { margin: 0 0 8px; font-size: 1.05rem; color: #fff; }
+.card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+
+.icon-sports { background: rgba(59, 130, 246, 0.18); }
+.icon-pokemon { background: rgba(249, 115, 22, 0.18); }
+.icon-tcg { background: rgba(168, 85, 247, 0.18); }
+.icon-multi { background: rgba(20, 184, 166, 0.18); }
+
+/* ---------- Screenshot strip ---------- */
+
+.shots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.shot {
+  border-radius: 26px;
+  border: 6px solid #14233b;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.shot img { width: 100%; }
+.shot-caption { text-align: center; margin-top: 12px; font-size: 0.88rem; color: var(--muted); }
+
+/* ---------- FAQ ---------- */
+
+.faq-item {
+  border-bottom: 1px solid rgba(223, 231, 242, 0.1);
+  padding: 22px 0;
+}
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.02rem;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  font-size: 1.4rem;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p { color: var(--muted); margin: 14px 0 0; max-width: 68ch; }
+
+/* ---------- Waitlist ---------- */
+
+.waitlist {
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--navy-800), var(--navy-700));
+  border: 1px solid rgba(223, 231, 242, 0.12);
+  padding: 56px;
+  text-align: center;
+}
+.waitlist h2 { margin-bottom: 10px; }
+.waitlist p { color: var(--silver); opacity: 0.8; margin: 0 0 28px; }
+
+.waitlist-form {
+  display: flex;
+  gap: 10px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.waitlist-form input[type="email"] {
+  flex: 1;
+  padding: 13px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(223, 231, 242, 0.25);
+  background: rgba(10, 22, 38, 0.4);
+  color: #fff;
+  font-size: 0.95rem;
+}
+.waitlist-form input[type="email"]::placeholder { color: var(--muted); }
+.waitlist-note { font-size: 0.82rem; color: var(--muted); margin-top: 14px; }
+.waitlist-success {
+  display: none;
+  color: #4ade80;
+  font-weight: 700;
+  margin-top: 18px;
+}
+.waitlist-error {
+  display: none;
+  color: #f87171;
+  font-weight: 600;
+  margin-top: 14px;
+  font-size: 0.88rem;
+}
+
+/* ---------- Footer ---------- */
+
+footer.site-footer {
+  border-top: 1px solid rgba(223, 231, 242, 0.08);
+  padding: 40px 0;
+}
+.footer-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-links a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.footer-links a:hover { color: var(--silver); }
+.footer-copy { font-size: 0.82rem; color: var(--muted); }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 880px) {
+  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero p.lead { margin-inline: auto; }
+  .hero-cta { justify-content: center; }
+  .hero-phone { margin-top: 24px; }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .shots { grid-template-columns: repeat(2, 1fr); }
+  nav.site-nav { display: none; }
+  .waitlist { padding: 36px 24px; }
+  .waitlist-form { flex-direction: column; }
+  section { padding: 60px 0; }
+}

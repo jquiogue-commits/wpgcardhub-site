@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>WPG CardHub — Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/favicon-64.png">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin">
+  <header class="admin-header">
+    <div class="wrap">
+      <a class="brand" href="../"><img src="../assets/app-icon-256.png" alt="">WPG CardHub — Admin</a>
+      <button class="admin-btn secondary" id="signout-btn" style="display:none;">Sign out</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+
+    <!-- Sign-in panel -->
+    <section class="panel" id="signin-panel">
+      <h1>Admin sign in</h1>
+      <p class="sub">Same email and password you use in the WPG CardHub app.</p>
+      <form id="signin-form">
+        <div class="field">
+          <label for="signin-email">Email</label>
+          <input type="email" id="signin-email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="signin-password">Password</label>
+          <input type="password" id="signin-password" autocomplete="current-password" required>
+        </div>
+        <button class="admin-btn" type="submit" id="signin-btn">Sign in</button>
+        <p class="msg error" id="signin-error" style="display:none;"></p>
+      </form>
+    </section>
+
+    <!-- Batch import panel -->
+    <section id="import-panel" style="display:none;">
+      <div class="panel">
+        <div class="topbar">
+          <div>
+            <h1>Batch flyer import</h1>
+            <p class="sub" style="margin:0;">Pick several flyer photos — each one is read by the same flyer-import AI the app uses, then you review and import them all at once.</p>
+          </div>
+          <span class="who" id="who-label"></span>
+        </div>
+
+        <label class="dropzone" id="dropzone">
+          <strong>Click to choose flyer photos</strong>
+          <div style="margin-top:6px;font-size:0.85rem;">or drag them in here — JPG or PNG (HEIC works in Safari)</div>
+          <input type="file" id="file-input" accept="image/*" multiple>
+        </label>
+        <p class="progress-line" id="progress-line"></p>
+        <p class="msg error" id="parse-error" style="display:none;"></p>
+      </div>
+
+      <div id="flyer-list"></div>
+
+      <div class="panel" id="import-actions" style="display:none;margin-top:20px;">
+        <button class="admin-btn" id="import-btn">Import checked shows</button>
+        <p class="msg info" id="import-status" style="display:none;"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="../js/config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
