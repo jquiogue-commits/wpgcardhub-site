@@ -26,7 +26,8 @@ function submitToSupabase(email) {
     },
     body: JSON.stringify({ email }),
   }).then((res) => {
-    if (!res.ok) throw new Error(`Supabase request failed (${res.status})`);
+    // 409 = this email is already on the waitlist, which is what they wanted.
+    if (!res.ok && res.status !== 409) throw new Error(`Supabase request failed (${res.status})`);
   });
 }
 

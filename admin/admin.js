@@ -98,6 +98,7 @@ function toJpeg(file, maxDimension = 1600, quality = 0.82) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
+      URL.revokeObjectURL(img.src);
       const scale = Math.min(1, maxDimension / Math.max(img.width, img.height));
       const canvas = document.createElement("canvas");
       canvas.width = Math.round(img.width * scale);
@@ -106,7 +107,10 @@ function toJpeg(file, maxDimension = 1600, quality = 0.82) {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("Could not encode image.")), "image/jpeg", quality);
     };
-    img.onerror = () => reject(new Error("Could not read that image."));
+    img.onerror = () => {
+      URL.revokeObjectURL(img.src);
+      reject(new Error("Could not read that image."));
+    };
     img.src = URL.createObjectURL(file);
   });
 }
@@ -350,13 +354,31 @@ async function insertShow(row) {
 async function importAll() {
   const importBtn = document.getElementById("import-btn");
   const status = document.getElementById("import-status");
-  const included = rows.filter((r) => r.included);
+  // Skip rows already imported — re-clicking after a partial failure must
+  // only retry the failures, not insert the successes again (each insert
+  // mints a fresh UUID, so a repeat would duplicate the show).
+  const included = rows.filter((r) => r.included && r.status !== "ok");
   importBtn.disabled = true;
   status.style.display = "block";
   status.className = "msg info";
 
+  if (!included.length) {
+    status.textContent = "Nothing to import — every checked show is already imported.";
+    importBtn.disabled = false;
+    return;
+  }
+
   let ok = 0, fail = 0;
   for (const row of included) {
+    // A show without a date would be saved as starting right now and
+    // immediately disappear from the app (past shows are hidden).
+    if (!row.date) {
+      row.status = "fail";
+      row.statusText = "No date — fill in the date field, then import again.";
+      fail++;
+      renderRows();
+      continue;
+    }
     status.textContent = `Importing "${row.title || "Untitled show"}"… (${ok + fail + 1} of ${included.length})`;
     try {
       await insertShow(row);
@@ -389,20 +411,26 @@ async function handleFiles(fileList) {
   const errorEl = document.getElementById("parse-error");
   errorEl.style.display = "none";
 
+  const failures = [];
+  let parsedCount = 0;
   for (let i = 0; i < files.length; i++) {
     progress.textContent = `Reading flyer ${i + 1} of ${files.length}…`;
     try {
       const jpeg = await toJpeg(files[i]);
       const parsed = await parseFlyer(jpeg);
       addRow(files[i], parsed);
+      parsedCount++;
     } catch (err) {
-      errorEl.textContent = `"${files[i].name}": ${err.message}`;
-      errorEl.style.display = "block";
+      failures.push(`"${files[i].name}": ${err.message}`);
     }
     // Be gentle with the flyer-parsing API.
     await new Promise((r) => setTimeout(r, 300));
   }
-  progress.textContent = `Parsed ${rows.length} of ${files.length} flyer(s). Review the details below before importing.`;
+  progress.textContent = `Parsed ${parsedCount} of ${files.length} flyer(s). Review the details below before importing.`;
+  if (failures.length) {
+    errorEl.textContent = failures.join(" — ");
+    errorEl.style.display = "block";
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -460,14 +488,23 @@ document.getElementById("import-btn").addEventListener("click", importAll);
 
 // Resume an existing session without re-prompting for a password.
 if (session) {
-  fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${session.userId}&select=role`, {
-    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${session.accessToken}` },
-  }).then(async (res) => {
-    const rows2 = await res.json();
-    if (res.ok && rows2[0]?.role === "admin") {
-      showImportUI("");
-    } else {
+  (async () => {
+    try {
+      const token = await ensureFreshToken(); // refreshes if expired
+      const headers = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}` };
+      const [roleRes, userRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${session.userId}&select=role`, { headers }),
+        fetch(`${SUPABASE_URL}/auth/v1/user`, { headers }),
+      ]);
+      const roleRows = await roleRes.json();
+      const user = userRes.ok ? await userRes.json() : {};
+      if (roleRes.ok && roleRows[0]?.role === "admin") {
+        showImportUI(user.email || "");
+      } else {
+        clearSession();
+      }
+    } catch {
       clearSession();
     }
-  }).catch(() => clearSession());
+  })();
 }
