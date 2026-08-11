@@ -1,3 +1,78 @@
+// ---------------------------------------------------------------------------
+// Screenshot carousel: native scroll-snap does the swiping, this just adds
+// arrows, dots, and keyboard support on top of it.
+
+(function initCarousel() {
+  const track = document.getElementById("shots-track");
+  const dotsBox = document.getElementById("shots-dots");
+  const prev = document.getElementById("shots-prev");
+  const next = document.getElementById("shots-next");
+  if (!track || !dotsBox) return;
+
+  const slides = Array.from(track.querySelectorAll(".slide"));
+  if (!slides.length) return;
+
+  slides.forEach((slide, i) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("role", "tab");
+    dot.setAttribute("aria-label", `Screenshot ${i + 1} of ${slides.length}`);
+    dot.addEventListener("click", () => scrollToSlide(i));
+    dotsBox.appendChild(dot);
+  });
+  const dots = Array.from(dotsBox.children);
+
+  /// Index of the slide whose centre is nearest the track's centre.
+  function currentIndex() {
+    const mid = track.scrollLeft + track.clientWidth / 2;
+    let best = 0;
+    let bestDistance = Infinity;
+    slides.forEach((slide, i) => {
+      const distance = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - mid);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = i;
+      }
+    });
+    return best;
+  }
+
+  function scrollToSlide(i) {
+    const slide = slides[Math.max(0, Math.min(i, slides.length - 1))];
+    track.scrollTo({
+      left: slide.offsetLeft - (track.clientWidth - slide.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+  }
+
+  function sync() {
+    const i = currentIndex();
+    dots.forEach((dot, n) => dot.setAttribute("aria-selected", String(n === i)));
+    if (prev) prev.disabled = i === 0;
+    if (next) next.disabled = i === slides.length - 1;
+  }
+
+  prev?.addEventListener("click", () => scrollToSlide(currentIndex() - 1));
+  next?.addEventListener("click", () => scrollToSlide(currentIndex() + 1));
+
+  track.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); scrollToSlide(currentIndex() - 1); }
+    if (e.key === "ArrowRight") { e.preventDefault(); scrollToSlide(currentIndex() + 1); }
+  });
+
+  let raf = 0;
+  track.addEventListener("scroll", () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(sync);
+  }, { passive: true });
+  window.addEventListener("resize", sync);
+
+  sync();
+})();
+
+// ---------------------------------------------------------------------------
+// Waitlist
+
 const FORMSPREE_URL = "https://formspree.io/f/mlgqrpee";
 
 const form = document.getElementById("waitlist-form");

@@ -241,21 +241,103 @@ h2 {
 .icon-tcg { background: rgba(168, 85, 247, 0.18); }
 .icon-multi { background: rgba(20, 184, 166, 0.18); }
 
-/* ---------- Screenshot strip ---------- */
+/* ---------- Screenshot carousel ---------- */
 
-.shots {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+.carousel { position: relative; }
+
+.carousel-track {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* Lets the first and last slide settle in the middle of the viewport. */
+  padding: 6px calc(50% - 145px) 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-.shot {
-  border-radius: 26px;
-  border: 6px solid #14233b;
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-track:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: var(--radius-md);
+}
+
+.slide {
+  flex: 0 0 auto;
+  width: 290px;
+  scroll-snap-align: center;
+  margin: 0;
+}
+.slide-phone {
+  border-radius: 34px;
+  border: 7px solid #14233b;
   overflow: hidden;
+  background: #14233b;
   box-shadow: var(--shadow);
+  /* Locks the frame to the screenshot's aspect ratio so nothing stretches. */
+  aspect-ratio: 644 / 1400;
 }
-.shot img { width: 100%; }
-.shot-caption { text-align: center; margin-top: 12px; font-size: 0.88rem; color: var(--muted); }
+.slide-phone img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.slide figcaption {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--silver);
+  opacity: 0.75;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(223, 231, 242, 0.2);
+  background: rgba(15, 33, 64, 0.82);
+  backdrop-filter: blur(8px);
+  color: var(--silver);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.carousel-btn svg { width: 22px; height: 22px; }
+.carousel-btn:hover { background: rgba(36, 72, 127, 0.95); }
+.carousel-btn.prev { left: -8px; }
+.carousel-btn.next { right: -8px; }
+.carousel-btn[disabled] { opacity: 0.25; cursor: default; }
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+.carousel-dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: rgba(223, 231, 242, 0.28);
+  cursor: pointer;
+  transition: background 0.2s ease, width 0.2s ease;
+}
+.carousel-dots button[aria-selected="true"] {
+  background: var(--accent);
+  width: 26px;
+  border-radius: 999px;
+}
 
 /* ---------- FAQ ---------- */
 
@@ -356,8 +438,11 @@ footer.site-footer {
   .hero-cta { justify-content: center; }
   .hero-phone { margin-top: 24px; }
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .shots { grid-template-columns: repeat(2, 1fr); }
   nav.site-nav { display: none; }
+  /* Touch swiping replaces the arrows on small screens. */
+  .carousel-btn { display: none; }
+  .slide { width: min(74vw, 290px); }
+  .carousel-track { padding-inline: calc(50% - min(37vw, 145px)); }
   .waitlist { padding: 36px 24px; }
   .waitlist-form { flex-direction: column; }
   section { padding: 60px 0; }

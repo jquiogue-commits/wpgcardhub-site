@@ -55,7 +55,7 @@
         </div>
         <div class="hero-phone">
           <div class="phone-frame">
-            <img src="assets/screenshots/1-discover.jpg" alt="WPG CardHub discover feed showing upcoming card shows" width="322" height="700" fetchpriority="high">
+            <img src="assets/screenshots/1-discover.jpg" alt="WPG CardHub discover feed showing upcoming card shows" width="644" height="1400" fetchpriority="high">
           </div>
         </div>
       </div>
@@ -98,13 +98,38 @@
         <div class="section-head">
           <p class="kicker">A closer look</p>
           <h2>Four screens from the app</h2>
-          <p>Real shows, real vendors, real map pins — this is what's live today.</p>
+          <p>Real shows, real vendors, real map pins — swipe through to see what's live today.</p>
         </div>
-        <div class="shots">
-          <figure class="shot"><img src="assets/screenshots/1-discover.jpg" alt="Discover feed" width="322" height="700" loading="lazy"></figure>
-          <figure class="shot"><img src="assets/screenshots/2-detail.jpg" alt="Show detail page" width="322" height="700" loading="lazy"></figure>
-          <figure class="shot"><img src="assets/screenshots/3-map.jpg" alt="Map of nearby shows" width="322" height="700" loading="lazy"></figure>
-          <figure class="shot"><img src="assets/screenshots/4-community.jpg" alt="Vendors and discussion" width="322" height="700" loading="lazy"></figure>
+
+        <div class="carousel">
+          <button class="carousel-btn prev" id="shots-prev" aria-label="Previous screenshot" aria-controls="shots-track">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div class="carousel-track" id="shots-track" tabindex="0" role="group" aria-label="App screenshots">
+            <figure class="slide">
+              <div class="slide-phone"><img src="assets/screenshots/1-discover.jpg" alt="Discover feed listing upcoming card shows" width="644" height="1400"></div>
+              <figcaption>Discover what's coming up</figcaption>
+            </figure>
+            <figure class="slide">
+              <div class="slide-phone"><img src="assets/screenshots/2-detail.jpg" alt="Show detail page with times, admission and venue map" width="644" height="1400" loading="lazy"></div>
+              <figcaption>Every detail in one place</figcaption>
+            </figure>
+            <figure class="slide">
+              <div class="slide-phone"><img src="assets/screenshots/3-map.jpg" alt="Map of card shows across Manitoba" width="644" height="1400" loading="lazy"></div>
+              <figcaption>Find shows near you</figcaption>
+            </figure>
+            <figure class="slide">
+              <div class="slide-phone"><img src="assets/screenshots/4-community.jpg" alt="Vendor list and show discussion thread" width="644" height="1400" loading="lazy"></div>
+              <figcaption>Vendors &amp; discussion</figcaption>
+            </figure>
+          </div>
+
+          <button class="carousel-btn next" id="shots-next" aria-label="Next screenshot" aria-controls="shots-track">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div class="carousel-dots" id="shots-dots" role="tablist" aria-label="Choose screenshot"></div>
         </div>
       </div>
     </section>
