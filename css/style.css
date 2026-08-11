@@ -34,7 +34,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-img { max-width: 100%; display: block; }
+/* height:auto is required — the width/height attributes on <img> are there to
+   reserve layout space, but without this they pin the rendered height to the
+   intrinsic pixel height and stretch the image. */
+img { max-width: 100%; display: block; height: auto; }
 
 a { color: inherit; }
 
@@ -191,7 +194,7 @@ h1 .hl { color: var(--accent); }
   border-radius: 0 0 14px 14px;
   z-index: 2;
 }
-.phone-frame img { width: 100%; display: block; }
+.phone-frame img { width: 100%; height: auto; display: block; }
 
 /* ---------- Section shared ---------- */
 
