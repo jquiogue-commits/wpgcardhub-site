@@ -184,16 +184,8 @@ h1 .hl { color: var(--accent); }
   overflow: hidden;
   position: relative;
 }
-.phone-frame::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 120px; height: 22px;
-  background: #1a2b45;
-  border-radius: 0 0 14px 14px;
-  z-index: 2;
-}
+/* No drawn notch here — the screenshots already contain the device's real
+   Dynamic Island, and a second faked one never lines up with it. */
 .phone-frame img { width: 100%; height: auto; display: block; }
 
 /* ---------- Section shared ---------- */
