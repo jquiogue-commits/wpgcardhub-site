@@ -360,14 +360,19 @@ function isPastDate(dateStr) {
   return dateStr < today;
 }
 
-/// Looks for a show already in the table with the same title, venue and day,
-/// so a re-run after a failed import doesn't stack duplicates.
+/// Case- and punctuation-insensitive, so "Swap Meet!" and "Swap Meet" are
+/// recognised as the same show rather than importing twice.
+function titleKey(s) {
+  return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+/// Looks for a show already in the table at the same venue and day whose title
+/// matches, so a re-run after a failed import doesn't stack duplicates.
 async function existingShow(row) {
   try {
     const token = await ensureFreshToken();
     const params = new URLSearchParams({
-      select: "id,start_at",
-      title: `eq.${row.title.trim()}`,
+      select: "id,title,start_at",
       venue_name: `eq.${row.venue.trim() || "TBD"}`,
     });
     const res = await fetch(`${SUPABASE_URL}/rest/v1/shows?${params}`, {
@@ -375,7 +380,10 @@ async function existingShow(row) {
     });
     if (!res.ok) return null;
     const rows = await res.json();
-    return rows.some((r) => (r.start_at || "").slice(0, 10) === row.date);
+    const key = titleKey(row.title);
+    return rows.some((r) =>
+      (r.start_at || "").slice(0, 10) === row.date && titleKey(r.title) === key
+    );
   } catch {
     return null; // never block an import because the check itself failed
   }
