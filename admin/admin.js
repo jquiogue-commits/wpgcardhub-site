@@ -351,6 +351,36 @@ async function insertShow(row) {
   }
 }
 
+/// True when a YYYY-MM-DD date falls before today (Winnipeg local).
+function isPastDate(dateStr) {
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Winnipeg",
+    year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date());
+  return dateStr < today;
+}
+
+/// Looks for a show already in the table with the same title, venue and day,
+/// so a re-run after a failed import doesn't stack duplicates.
+async function existingShow(row) {
+  try {
+    const token = await ensureFreshToken();
+    const params = new URLSearchParams({
+      select: "id,start_at",
+      title: `eq.${row.title.trim()}`,
+      venue_name: `eq.${row.venue.trim() || "TBD"}`,
+    });
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/shows?${params}`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows.some((r) => (r.start_at || "").slice(0, 10) === row.date);
+  } catch {
+    return null; // never block an import because the check itself failed
+  }
+}
+
 async function importAll() {
   const importBtn = document.getElementById("import-btn");
   const status = document.getElementById("import-status");
@@ -375,6 +405,23 @@ async function importAll() {
     if (!row.date) {
       row.status = "fail";
       row.statusText = "No date — fill in the date field, then import again.";
+      fail++;
+      renderRows();
+      continue;
+    }
+    // Same trap, one step later: flyers often print no year, so a misread
+    // date imports fine and then never appears. Catch it here instead.
+    if (isPastDate(row.date)) {
+      row.status = "fail";
+      row.statusText = `${row.date} is in the past — the app hides past shows. Check the year, then import again.`;
+      fail++;
+      renderRows();
+      continue;
+    }
+    const clash = await existingShow(row);
+    if (clash) {
+      row.status = "fail";
+      row.statusText = "Already imported — a show with this title, venue and date exists. Uncheck it, or change a detail to import anyway.";
       fail++;
       renderRows();
       continue;
