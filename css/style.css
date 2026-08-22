@@ -372,6 +372,23 @@ h2 {
 .waitlist h2 { margin-bottom: 10px; }
 .waitlist p { color: var(--silver); opacity: 0.8; margin: 0 0 28px; }
 
+.waitlist-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 440px;
+  margin: 32px auto 20px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.waitlist-divider::before,
+.waitlist-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(223, 231, 242, 0.15);
+}
+
 .waitlist-form {
   display: flex;
   gap: 10px;

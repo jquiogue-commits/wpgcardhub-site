@@ -126,6 +126,6 @@ form.addEventListener("submit", async (e) => {
     errorEl.textContent = "Something went wrong — mind trying again in a moment?";
     errorEl.style.display = "block";
     submitBtn.disabled = false;
-    submitBtn.textContent = "Notify Me";
+    submitBtn.textContent = "Sign Up";
   }
 });
