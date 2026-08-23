@@ -168,6 +168,23 @@ h1 .hl { color: var(--accent); }
 }
 
 .hero-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+
+.hero-qr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 6px;
+  background: rgba(223, 231, 242, 0.06);
+  border: 1px solid rgba(223, 231, 242, 0.14);
+  border-radius: 999px;
+}
+.hero-qr img { border-radius: 6px; }
+.hero-qr span {
+  font-size: 0.78rem;
+  line-height: 1.25;
+  color: var(--muted);
+  font-weight: 600;
+}
 .fineprint { font-size: 0.85rem; color: var(--muted); }
 
 .hero-phone {
@@ -448,6 +465,9 @@ footer.site-footer {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
   .hero p.lead { margin-inline: auto; }
   .hero-cta { justify-content: center; }
+  /* Visitors on a phone already have the app in hand — the code is for
+     someone browsing on a laptop who wants it on their phone instead. */
+  .hero-qr { display: none; }
   .hero-phone { margin-top: 24px; }
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   nav.site-nav { display: none; }
