@@ -292,7 +292,16 @@ async function uploadBanner(id, file) {
   const token = await ensureFreshToken();
   const res = await fetch(`${SUPABASE_URL}/storage/v1/object/card-images/banners/${id}.jpg`, {
     method: "POST",
-    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, "Content-Type": "image/jpeg", "x-upsert": "true" },
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "image/jpeg",
+      "x-upsert": "true",
+      // UUID-keyed path whose contents never change — cache for a year.
+      // Supabase otherwise defaults to no-cache, forcing a re-download on
+      // every view and burning Storage egress.
+      "cache-control": "public, max-age=31536000, immutable",
+    },
     body: jpeg,
   });
   if (!res.ok) throw new Error(`Banner upload failed (${res.status})`);
